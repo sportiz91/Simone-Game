@@ -50,7 +50,7 @@ function nextSequence() {
 //función que ejecuta el sonido según el color clickeado o según el nextSequence().
 function playSound(name) {
 
-  var audio = new Audio("sounds/" + name + ".mp3");
+  var audio = new Audio("C:/Users/W10/Google Drive/Back Up/Escritorio/Solidity/Web Development Proyects/Simone Game Challenge/sounds/" + name + ".mp3");
   audio.play();
 
 }
