@@ -1,0 +1,68 @@
+body {
+  text-align: center; /* centra elementos en el medio */
+  background-color: #011F3F;
+}
+
+#level-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 3rem;
+  margin: 5%;
+  color: #FEF2BF;
+}
+
+.container {
+  display: block; /* si está o no está, no afecta mucho el comportamiento de la página */
+  width: 50%;
+  margin: auto;
+}
+
+.btn {
+  margin: 25px; /* margen a todos los costados del botón. En caso de ponerle un margen muy alto (probar con 250 px), veré que se me pone uno abajo del otro porque cubre con el width del 50% */
+  display: inline-block;
+  height: 200px;
+  width: 200px;
+  border: 10px solid black;
+  border-radius: 20%;
+}
+
+/* Se entiende como funciona esto. Tengo un container que tiene 2 filas. Dentro de cada fila hay dos botones.
+Cada botón tendrá la propiedad inline-block, de modo tal de poder dejar un botón a la derecha. No obstante, el HTML tag div,
+por default trae el display: block. Esto quiere decir que luego de los dos botones que componene cada div, pasaré a una nueva
+fila */
+
+.game-over {
+  background-color: red;
+  opacity: 0.8;
+}
+
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.pressed {
+  box-shadow: 0 0 20px white;
+  background-color: grey;
+}
+
+.footer-paragraph {
+  display: inline-block;
+  margin-top: 5%;
+  color: #FEF2BF;
+}
+
+footer {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+}

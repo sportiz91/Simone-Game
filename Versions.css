@@ -1,0 +1,121 @@
+/* Versión 1
+En esta versión, arranca el juego con secuencia aleatoria. El usuario tiene que ir tocando la secuencia que recuerda.
+El resultado solo se evalúa cuando el largo del array de respuesta del usuario es igual al array del patrón del juego.
+
+-----------------------CODIGO!-----------------------------------------------------------------------------------------
+
+//alert de comprobación sincronización correcta.
+// alert("hola");
+
+//arrays/variables iniciales
+var buttonColors = ["red", "blue", "green", "yellow"]; //colores disponibles
+var gamePattern = []; //patrón que usa el Simone Game. Arranca sin elementos.
+var userPattern = []; //patrón del usuario. Arranca sin elementos
+var level = 0; //nivel actual del juego. Cuando es 0, el juego arranca automáticamente al presionar una tecla. A medida
+//voy pasando los niveles, level irá incrementando de a 1 y cambiando el título del juego por el nivel actual.
+
+
+//inicializa juego si level = 0. Si la secuencia es correcta, agrega un nuevo color aleatorio a la secuencia del array gamePattern.
+function nextSequence() {
+
+  //cambiamos el título al nivel actual
+  $("h1").html("Level " + level);
+
+  //incrementamos un nivel
+  level++;
+
+  //función que genera número aleatorio en rango 0-3
+  var randomNumber = Math.floor(Math.random() * 4);
+
+  //variable con color random
+  var randomChosenColour = buttonColors[randomNumber];
+
+  //se agrega color random a array de gamePattern
+  gamePattern.push(randomChosenColour);
+
+  //seleccionar botón que salió elegido en el randomChosenColour y hacerle efecto flash
+  $("#" + randomChosenColour).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+
+  //darle sonido al botón seleccionado
+  playSound(randomChosenColour);
+
+}
+
+//for loop itera sobre array de colores y agrega un click event listener. Luego ejecuta funciones playSound, animatePress
+//y checkAnwser luego de un timer.
+for (var i = 0; i < buttonColors.length; i++) { //de 0 a 3.
+
+  //agregamos event listener para cada botón
+  $("#" + buttonColors[i]).click(function () { //otra variante del eventlistener: .on("click", function () {bla})
+
+    //nos guardamos el nombre del color en la variable buttonName.
+    var buttonName = $(this).attr("id");
+
+    //ejecutamos sonido del color.
+    playSound(buttonName);
+
+    //ejecutamos animación (la misma para todos los colores).
+    animatePress(buttonName);
+
+    //agregamos el color clickeado al array userPattern
+    userPattern.push(buttonName);
+
+    //timeout: para que no salga primero el alert de que ganamos o perdimos el nivel, antes del sonido y el efecto flash.
+    setTimeout(function() {
+      if (userPattern.length === gamePattern.length) { //solo si los lengths son iguales tengo que chequear si la secuencia es correcta
+      checkAnswer();
+      }
+    }, 200); //timer de 200 ms porque el timer del efecto flash es de 100 ms (esto tiene que ser mayor).
+
+  })
+}
+
+//función que ejecuta el sonido según el color clickeado o según el nextSequence().
+function playSound(name) {
+
+  var audio = new Audio("sounds/" + name + ".mp3");
+  audio.play();
+
+}
+
+//función que agrega clase color gris al botón presionado. La quita luego de 100 milisegundos (= 1 segundo)
+function animatePress(currentColour) {
+  $("#" + currentColour).addClass("pressed");
+
+  setTimeout(function() {
+    $("#" + currentColour).removeClass("pressed");
+  }, 100);
+}
+
+//event listener. Cuando se clickea una tecla por primera vez (level = 0) se ejecuta la función nextSequence.
+//Importante: cuandok selecciono los objetos del DOM con jQuery, el event listener no se puede agregar a través de
+//addEventListener. Lo puedo agregar directamente poniendo . y el event listener que quiera utilizar.
+$(document).keydown(function () {
+  if (level === 0) {
+    nextSequence();
+  }
+})
+
+//función que chequea que la respuesta del usuario es la misma que el patrón del Simone Game.
+function checkAnswer(currentLevel) {
+
+  //iteramos sobre todos los elementos del array de respuesta del usuario.
+  for (var j = 0; j < userPattern.length; j++) {
+    if (userPattern[j] !== gamePattern[j]) { //si un determinado elemento es diferente del patrón del juego, result = true.
+      var result = true;
+    }
+
+    if (result === true) { //si el resultado es true, vemos el cartel de perder + reiniciamos variables de comienzo.
+      alert("You lose! User Pattern: " + userPattern + ". gamePattern: " + gamePattern + ".");
+      level = 0;
+      $("h1").html("Press A Key to Start");
+      gamePattern = [];
+      userPattern = [];
+      return;
+    }
+  }
+
+  //líneas de código que ejecutamos si ambos arrays son iguales.
+  alert("Next level! User Pattern: " + userPattern + ". gamePattern: " + gamePattern + ".");
+  nextSequence(); //comenzamos nueva secuencia.
+  userPattern = []; //volvemos a 0 el array del usuario.
